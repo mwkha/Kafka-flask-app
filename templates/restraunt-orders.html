@@ -1,0 +1,35 @@
+<title>Restraunt Orders</title>
+<style>
+  #data {
+    text-align: center;
+  }
+  table, th, td {
+    border: 1px solid #666666;
+    border-collapse: collapse;
+  }
+  td.header {
+    color: #000000;
+    background-color: #cccccc;
+  }
+</style>
+<h2 style="font-size:22pt">Restraunt-Orders 💪</h2>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script>
+  function orderIsReady(id, caller, address){
+    var request = new XMLHttpRequest();
+    
+    request.open("POST", "/order-ready/"+id, true);
+    request.setRequestHeader("Content-Type","application/json")
+    payload = {"caller":caller, "address":address}
+    request.send(JSON.stringify(payload));
+    document.getElementById(id).disabled = true;
+
+  }
+</script>
+<div id="data"><table id="mytable"><tr><td class="header">Timestamp</td><td class="header">Caller</td><td class="header">Restraunt</td><td class="header">Address</td><td class="header">Order Status</td></tr></table></div>
+{% for t, c, p, a, b in data: %}
+<script>
+    $("#mytable tr:first").after("<tr><td>{{ t }}</td><td>{{ c }}</td><td>{{ p }}</td><td>{{ a }}</td><td><input id='{{ t }}' type='submit' value='Order Ready!' name='{{ b }}' onclick=\"orderIsReady('{{ t }}', '{{ c }}', '{{ a }}')\" /></td></tr>")
+    
+</script>
+{% endfor %}
