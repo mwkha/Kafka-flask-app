@@ -1,4 +1,4 @@
-<title>Restraunt Orders</title>
+<title>Restaurant Orders</title>
 <style>
   #data {
     text-align: center;
@@ -12,7 +12,7 @@
     background-color: #cccccc;
   }
 </style>
-<h2 style="font-size:22pt">Restraunt-Orders 💪</h2>
+<h2 style="font-size:22pt">Restaurant-Orders 💪</h2>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script>
   function orderIsReady(id, caller, address){
@@ -26,7 +26,7 @@
 
   }
 </script>
-<div id="data"><table id="mytable"><tr><td class="header">Timestamp</td><td class="header">Caller</td><td class="header">Restraunt</td><td class="header">Address</td><td class="header">Order Status</td></tr></table></div>
+<div id="data"><table id="mytable"><tr><td class="header">Timestamp</td><td class="header">Caller</td><td class="header">restaurant</td><td class="header">Address</td><td class="header">Order Status</td></tr></table></div>
 {% for t, c, p, a, b in data: %}
 <script>
     $("#mytable tr:first").after("<tr><td>{{ t }}</td><td>{{ c }}</td><td>{{ p }}</td><td>{{ a }}</td><td><input id='{{ t }}' type='submit' value='Order Ready!' name='{{ b }}' onclick=\"orderIsReady('{{ t }}', '{{ c }}', '{{ a }}')\" /></td></tr>")

@@ -25,14 +25,14 @@ app = Flask(__name__, template_folder='templates')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    """Returning home page for Restraunt"""
+    """Returning home page for restaurant"""
     if request.method == 'POST':
         producer.send(
             TOPIC_ORDER_NAME,
             key={"caller": request.form.get("caller")},
             value={
                 "caller": request.form.get("caller"),
-                "restraunt": request.form.get("restraunt"),
+                "restaurant": request.form.get("restaurant"),
                 "address": request.form.get("address"),
                 "timestamp": int(time.time())
             }
@@ -51,7 +51,7 @@ def stream_template(template_name, **context):
     streaming = template.stream(context)
     return streaming
 
-@app.route('/restraunt-orders')
+@app.route('/restaurant-orders')
 def consume():
     """Returning pizza orders"""
     consumer = KafkaConsumer(
@@ -73,12 +73,11 @@ def consume():
             yield [
                 message.value["timestamp"],
                 message.value["caller"],
-                message.value["restraunt"],
+                message.value["restaurant"],
                 message.value["address"],
                 1]
 
-    return Response(stream_template('restraunt-orders.html', data=consume_msg()))
+    return Response(stream_template('restaurant-orders.html', data=consume_msg()))
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
-    
