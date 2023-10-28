@@ -27,9 +27,9 @@
   }
 </script>
 <div id="data"><table id="mytable"><tr><td class="header">Timestamp</td><td class="header">Caller</td><td class="header">restaurant</td><td class="header">Address</td><td class="header">Order Status</td></tr></table></div>
-{% for t, c, r, a, b in data: %}
+{% for t, c, r, a, s in data: %}
 <script>
-    $("#mytable tr:first").after("<tr><td>{{ t }}</td><td>{{ c }}</td><td>{{ r }}</td><td>{{ a }}</td><td><input id='{{ t }}' type='submit' value='Order Ready!' name='{{ b }}' onclick=\"orderIsReady('{{ t }}', '{{ c }}', '{{ a }}')\" /></td></tr>")
+    $("#mytable tr:first").after("<tr><td>{{ t }}</td><td>{{ c }}</td><td>{{ r }}</td><td>{{ a }}</td><td><input id='{{ t }}' type='submit' value='Order Ready!' name='{{ s }}' onclick=\"orderIsReady('{{ t }}', '{{ c }}', '{{ a }}')\" /></td></tr>")
     
 </script>
 {% endfor %}
