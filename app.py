@@ -34,7 +34,7 @@ def index():
                 "caller": request.form.get("caller"),
                 "restaurant": request.form.get("restaurant"),
                 "address": request.form.get("address"),
-                "timestamp": int(time.time())
+                "timestamp": int(round(time.time() * 1000))
             }
         )
 
@@ -78,6 +78,46 @@ def consume():
                 1]
 
     return Response(stream_template('restaurant-orders.html', data=consume_msg()))
+
+@app.route('/order-ready/<my_id>', methods=['POST'])
+def pizza_ready(my_id=None):
+    """Endpoint to pass ready orders"""
+    print(my_id)
+    producer.send(
+        TOPIC_DELIVERY_NAME,
+        key={"timestamp": my_id},
+        value=request.json
+    )
+    producer.flush()
+    return "OK"
+
+@app.route('/order-delivery-pickup')
+def consume_delivery():
+    """Returning home page for Pizza delivery"""
+    consumer_delivery = KafkaConsumer(
+        client_id="clientDelivery",
+        group_id=CONSUMER_DELIVERY_GROUP,
+        bootstrap_servers=KAFKA_SERVER,
+        value_deserializer=lambda v: json.loads(v.decode('ascii')),
+        key_deserializer=lambda v: json.loads(v.decode('ascii')),
+        max_poll_records=10,
+        auto_offset_reset='earliest',
+        session_timeout_ms=6000,
+        heartbeat_interval_ms=3000
+    )
+    consumer_delivery.subscribe(topics=[TOPIC_DELIVERY_NAME])
+
+    def consume_msg_delivery():
+        for message in consumer_delivery:
+            print(message.value)
+            yield [
+                message.key["timestamp"],
+                message.value["caller"],
+                message.value["address"]
+            ]
+
+    return Response(
+        stream_template('order-delivery-pickup.html', data=consume_msg_delivery()))
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
