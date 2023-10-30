@@ -27,10 +27,10 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">project_title</h3>
+<h3 align="center">Food ordering app with flask and kafka</h3>
 
   <p align="center">
-    project_description
+    A simple food ordering app using flask to serve web app and kafka to orchestrate events between web pages.
     <br />
     <a href="https://github.com/mwkha/kafka-flask-app"><strong>Explore the docs »</strong></a>
     <br />
